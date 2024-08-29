@@ -6,11 +6,13 @@ import TarotExperience from './TarotExperience'
 function LandingPage() {
   return (
     <div className="galaxy">
-      <h1>Welcome to My Galaxy</h1>
-      <p>Explore the stars and beyond!</p>
-      <Link to="/tarot">
-        <button>Enter</button>
-      </Link>
+      <div className="galaxy-content">
+        <h1>Welcome to My Galaxy</h1>
+        <p>Explore the stars and beyond!</p>
+        <Link to="/tarot">
+          <button>Enter</button>
+        </Link>
+      </div>
     </div>
   )
 }
