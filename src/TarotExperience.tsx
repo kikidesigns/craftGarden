@@ -21,10 +21,29 @@ const TarotExperience: React.FC = () => {
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
+    // Add skybox
+    const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+    const skyboxMaterials = [
+      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/right.png'), side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/left.png'), side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/top.png'), side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/bottom.png'), side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/front.png'), side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/back.png'), side: THREE.BackSide }),
+    ];
+    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
+    scene.add(skybox);
+
     camera.position.z = 5;
 
     // Render the scene
-    renderer.render(scene, camera);
+    const animate = () => {
+      requestAnimationFrame(animate);
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    };
+    animate();
 
     // Handle window resize
     const handleResize = () => {
@@ -35,7 +54,6 @@ const TarotExperience: React.FC = () => {
       camera.updateProjectionMatrix();
 
       renderer.setSize(width, height);
-      renderer.render(scene, camera);
     };
 
     window.addEventListener('resize', handleResize);
