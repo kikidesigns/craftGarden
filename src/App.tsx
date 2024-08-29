@@ -5,11 +5,11 @@ import TarotExperience from './TarotExperience'
 
 function LandingPage() {
   return (
-    <div className="galaxy">
-      <h1>Welcome to My Galaxy</h1>
-      <p>Explore the stars and beyond!</p>
+    <div className="tarot-landing">
+      <h1>Welcome to craftGarden</h1>
+      <p>Explore the mystical world of Tarot</p>
       <Link to="/tarot">
-        <button>Enter</button>
+        <button>Begin Your Tarot Journey</button>
       </Link>
     </div>
   )
