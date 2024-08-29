@@ -1,17 +1,28 @@
 import { useState } from 'react'
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 import './App.css'
+import TarotExperience from './TarotExperience'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function LandingPage() {
   return (
     <div className="galaxy">
       <h1>Welcome to My Galaxy</h1>
       <p>Explore the stars and beyond!</p>
-      <button onClick={() => setCount((count) => count + 1)}>
-        count is {count}
-      </button>
+      <Link to="/tarot">
+        <button>Enter</button>
+      </Link>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/tarot" element={<TarotExperience />} />
+      </Routes>
+    </Router>
   )
 }
 
