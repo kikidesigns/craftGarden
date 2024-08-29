@@ -1,6 +1,35 @@
 # craftGarden
 Virtual World for Witchcraft and Wizardry
 
+## Project Overview
+
+craftGarden is an immersive React Three Fiber (R3F) web application that brings the mystical world of tarot to life in a virtual space. Our goal is to create an engaging, interactive experience that combines the depth of tarot readings with the social aspects of online communities.
+
+### Key Features
+
+1. **Virtual Tarot Experience**
+   - Choose from 3 different tarot spreads
+   - Cards are randomly pulled from our deck
+   - Animated card movements inspired by MTG Arena
+   - Interactive 3D viewing of cards and spreads
+
+2. **User Accounts and Privacy**
+   - Guest access for basic tarot readings
+   - User registration and login for enhanced features
+   - Varying levels of social and private experiences
+
+3. **Tarot Reading Management**
+   - Save readings (for registered users)
+   - Email reading results (available for guests and registered users)
+
+4. **Social Integration**
+   - Share thoughts and experiences using Nostr protocol
+   - Community pages for user interaction
+
+5. **Neopets-inspired Features**
+   - Different pages with varying levels of social/private experiences
+   - Creature Breeder game-like elements (planned feature)
+
 ## Project Structure
 
 ```
@@ -28,7 +57,7 @@ craftGarden/
 └── vite.config.ts
 ```
 
-This project appears to be a web application built with TypeScript, React, and Vite. The `src/` directory contains the main source code, while the `public/` directory may contain static assets.
+This project is built with TypeScript, React, and Vite. The `src/` directory contains the main source code, while the `public/` directory may contain static assets.
 
 ## Source Files Description
 
@@ -40,4 +69,18 @@ This project appears to be a web application built with TypeScript, React, and V
 - `vite-env.d.ts`: TypeScript declaration file for Vite-specific types.
 - `assets/`: Directory for storing static assets like images, fonts, etc.
 
-The application features a galaxy-themed landing page and a 3D Tarot card experience using Three.js.
+## Getting Started
+
+(Add instructions for setting up and running the project locally)
+
+## Contributing
+
+(Add guidelines for contributing to the project)
+
+## License
+
+(Add license information)
+
+---
+
+craftGarden is currently under development. We're excited to bring this magical experience to life and welcome contributions from the community!
