@@ -41,7 +41,21 @@ const TarotExperience: React.FC = () => {
     };
   }, []);
 
-  return <div ref={mountRef} style={{ width: '100%', height: '100vh' }} />;
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
+      <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
+      <div style={{
+        position: 'absolute',
+        top: '20px',
+        left: '20px',
+        color: 'white',
+        fontSize: '24px',
+        zIndex: 10
+      }}>
+        Welcome to the Tarot Experience!
+      </div>
+    </div>
+  );
 };
 
 export default TarotExperience;
