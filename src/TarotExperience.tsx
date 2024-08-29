@@ -23,26 +23,32 @@ const TarotExperience: React.FC = () => {
 
     camera.position.z = 5;
 
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate);
+    // Render the scene
+    renderer.render(scene, camera);
 
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+    // Handle window resize
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
 
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(width, height);
       renderer.render(scene, camera);
     };
 
-    animate();
+    window.addEventListener('resize', handleResize);
 
     // Clean up
     return () => {
+      window.removeEventListener('resize', handleResize);
       mountRef.current?.removeChild(renderer.domElement);
     };
   }, []);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
+    <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
       <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
       <div style={{
         position: 'absolute',
