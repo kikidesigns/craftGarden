@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 import './App.css'
 import TarotExperience from './TarotExperience'
@@ -31,27 +31,27 @@ function LandingPage() {
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/tarot" element={
-          <>
-            <HotBar />
-            <TarotExperience />
-          </>
-        } />
-        <Route path="/about" element={
-          <>
-            <HotBar />
-            <div>About Page</div>
-          </>
-        } />
-        <Route path="/contact" element={
-          <>
-            <HotBar />
-            <div>Contact Page</div>
-          </>
-        } />
-      </Routes>
+      <div className="app-container">
+        <HotBar />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/tarot" element={
+            <>
+              <TarotExperience />
+            </>
+          } />
+          <Route path="/about" element={
+            <>
+              <div>About Page</div>
+            </>
+          } />
+          <Route path="/contact" element={
+            <>
+              <div>Contact Page</div>
+            </>
+          } />
+        </Routes>
+      </div>
     </Router>
   )
 }
