@@ -12,9 +12,10 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     // Set up scene
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
     mountRef.current.appendChild(renderer.domElement);
 
     // Add OrbitControls
@@ -176,9 +177,9 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   }, [selectedSpread]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px', display: 'flex', justifyContent: 'flex-start' }}>
-      <div ref={mountRef} style={{ width: '80%', height: '100%' }} />
-      <div style={{ width: '20%', padding: '20px' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', overflow: 'hidden' }}>
+      <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
+      <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0, 0, 0, 0.5)', color: 'white', padding: '10px', borderRadius: '5px' }}>
         <h3>Controls:</h3>
         <p>Click on an object to select it.</p>
         <p>Use arrow keys to move the selected object left, right, up, and down.</p>
