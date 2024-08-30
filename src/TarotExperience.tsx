@@ -15,32 +15,20 @@ const TarotExperience: React.FC = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(renderer.domElement);
 
-    // Create a simple cube as a placeholder for the tarot card
-    const geometry = new THREE.BoxGeometry(1, 1.5, 0.1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    // Load the 360 panorama image
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load('/assets/panorama.jpg', (texture) => {
+      const geometry = new THREE.SphereGeometry(500, 60, 40);
+      const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.BackSide });
+      const sphere = new THREE.Mesh(geometry, material);
+      scene.add(sphere);
+    });
 
-    // Add skybox
-    const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-    const skyboxMaterials = [
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/right.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/left.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/top.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/bottom.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/front.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/back.png'), side: THREE.BackSide }),
-    ];
-    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
-    scene.add(skybox);
-
-    camera.position.z = 5;
+    camera.position.set(0, 0, 0);
 
     // Render the scene
     const animate = () => {
       requestAnimationFrame(animate);
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
       renderer.render(scene, camera);
     };
     animate();
