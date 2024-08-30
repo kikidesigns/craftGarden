@@ -21,6 +21,22 @@ const TarotExperience: React.FC = () => {
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
+    // Create blue spheres for the three card spread positions
+    const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Blue color
+
+    const positions = [
+      { x: -1.5, y: 0, z: 0 },
+      { x: 0, y: 0, z: 0 },
+      { x: 1.5, y: 0, z: 0 }
+    ];
+
+    positions.forEach(pos => {
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      sphere.position.set(pos.x, pos.y, pos.z);
+      scene.add(sphere);
+    });
+
     // Add skybox
     const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
     const skyboxMaterials = [
@@ -39,8 +55,8 @@ const TarotExperience: React.FC = () => {
     // Render the scene
     const animate = () => {
       requestAnimationFrame(animate);
-      cube.rotation.x += 0.01;
-      cube.rotation.y += 0.01;
+      // cube.rotation.x += 0.01; // Stopped rotation
+      // cube.rotation.y += 0.01; // Stopped rotation
       renderer.render(scene, camera);
     };
     animate();
