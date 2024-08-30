@@ -32,21 +32,23 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        <HotBar />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/tarot" element={
             <>
+              <HotBar />
               <TarotExperience />
             </>
           } />
           <Route path="/about" element={
             <>
+              <HotBar />
               <div>About Page</div>
             </>
           } />
           <Route path="/contact" element={
             <>
+              <HotBar />
               <div>Contact Page</div>
             </>
           } />
