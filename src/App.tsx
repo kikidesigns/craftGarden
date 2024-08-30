@@ -27,8 +27,8 @@ function HotBar({ setSelectedSpread }) {
         )}
       </div>
       <span className="welcome-message">Welcome to Tarot Experience</span>
-      <span className="jupiter-symbol">
-        \\u2643
+      <span className="venus-symbol">
+        \\u2640
       </span>
     </div>
   );
