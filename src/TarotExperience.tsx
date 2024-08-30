@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [selectedObject, setSelectedObject] = useState<THREE.Mesh | null>(null);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -14,6 +16,12 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(renderer.domElement);
+
+    // Add OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
 
     // Create a simple cube as a placeholder for the tarot card
     const geometry = new THREE.BoxGeometry(1, 1.5, 0.1);
@@ -84,9 +92,63 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     camera.position.set(5, 0, 5);
     camera.lookAt(0, 0, 0);
 
+    // Raycaster for object selection
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    // Event listener for object selection
+    const onMouseClick = (event: MouseEvent) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(scene.children);
+
+      if (intersects.length > 0) {
+        const clickedObject = intersects[0].object;
+        if (clickedObject instanceof THREE.Mesh) {
+          setSelectedObject(clickedObject);
+        }
+      } else {
+        setSelectedObject(null);
+      }
+    };
+
+    window.addEventListener('click', onMouseClick);
+
+    // Keyboard controls for moving objects
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (selectedObject) {
+        const speed = 0.1;
+        switch (event.key) {
+          case 'ArrowLeft':
+            selectedObject.position.x -= speed;
+            break;
+          case 'ArrowRight':
+            selectedObject.position.x += speed;
+            break;
+          case 'ArrowUp':
+            selectedObject.position.y += speed;
+            break;
+          case 'ArrowDown':
+            selectedObject.position.y -= speed;
+            break;
+          case 'PageUp':
+            selectedObject.position.z -= speed;
+            break;
+          case 'PageDown':
+            selectedObject.position.z += speed;
+            break;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+
     // Render the scene
     const animate = () => {
       requestAnimationFrame(animate);
+      controls.update();
       renderer.render(scene, camera);
     };
     animate();
@@ -107,6 +169,8 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     // Clean up
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('click', onMouseClick);
+      window.removeEventListener('keydown', onKeyDown);
       mountRef.current?.removeChild(renderer.domElement);
     };
   }, [selectedSpread]);
@@ -114,6 +178,13 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   return (
     <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px', display: 'flex', justifyContent: 'flex-start' }}>
       <div ref={mountRef} style={{ width: '80%', height: '100%' }} />
+      <div style={{ width: '20%', padding: '20px' }}>
+        <h3>Controls:</h3>
+        <p>Click on an object to select it.</p>
+        <p>Use arrow keys to move the selected object left, right, up, and down.</p>
+        <p>Use Page Up and Page Down to move the selected object forward and backward.</p>
+        <p>Use mouse to look around and zoom.</p>
+      </div>
     </div>
   );
 };
