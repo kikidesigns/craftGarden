@@ -114,7 +114,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   }, [selectedSpread]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px', display: 'flex', justifyContent: 'flex-end' }}>
+    <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px', display: 'flex', justifyContent: 'flex-start' }}>
       <div ref={mountRef} style={{ width: '80%', height: '100%' }} />
     </div>
   );
