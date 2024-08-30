@@ -35,83 +35,11 @@
   font-size: 18px;
 }
 
-.venus-symbol {
+main
   font-size: 24px;
 }
 
-.galaxy {
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-}
-
-.galaxy::before {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                    radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                    radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
-                    radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
-  background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
-  background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
-  animation: stars 240s linear infinite;
-  z-index: 0;
-}
-
-@keyframes stars {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  z-index: 2;
-  position: relative;
-}
-
-p {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-  z-index: 2;
-  position: relative;
-}
-
-button {
-  background-color: white;
-  color: black;
-  border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  z-index: 2;
-  position: relative;
-}
-
-button:hover {
-  background-color: #f0f0f0;
-}
-
-.galaxy-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 60px; /* Add space for the hot bar */
+.venus-symbol {
+  font-size: 24px;
+  content: '\2640'; /* Venus symbol */
 }
