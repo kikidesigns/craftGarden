@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
-import './App.css'
-import TarotExperience from './TarotExperience'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import './App.css';
+import TarotExperience from './TarotExperience';
 
-function HotBar() {
+function HotBar({ setSelectedSpread }) {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const tarotSpreads = [
@@ -21,7 +21,7 @@ function HotBar() {
         {showDropdown && (
           <div className="dropdown-content">
             {tarotSpreads.map((spread, index) => (
-              <a key={index} href="#">{spread}</a>
+              <a key={index} href="#" onClick={() => setSelectedSpread(spread)}>{spread}</a>
             ))}
           </div>
         )}
@@ -31,7 +31,7 @@ function HotBar() {
         \\u2643
       </span>
     </div>
-  )
+  );
 }
 
 function LandingPage() {
@@ -45,23 +45,25 @@ function LandingPage() {
         </Link>
       </div>
     </div>
-  )
+  );
 }
 
 function App() {
+  const [selectedSpread, setSelectedSpread] = useState('');
+
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/tarot" element={
           <>
-            <HotBar />
-            <TarotExperience />
+            <HotBar setSelectedSpread={setSelectedSpread} />
+            <TarotExperience selectedSpread={selectedSpread} />
           </>
         } />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

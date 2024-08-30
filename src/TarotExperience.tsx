@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-const TarotExperience: React.FC = () => {
+const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [selectedSpread, setSelectedSpread] = useState<string>('');
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -68,6 +67,8 @@ const TarotExperience: React.FC = () => {
         });
       }
     };
+
+    addSpheres(selectedSpread);
 
     // Add skybox
     const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
