@@ -70,17 +70,15 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
 
     addSpheres(selectedSpread);
 
-    // Add skybox (placeholder)
-    const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-    const skyboxMaterials = [
-      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
-    ];
-    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
+    // Add skybox
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load('/src/assets/panorama.jpg');
+    const skyboxGeometry = new THREE.SphereGeometry(500, 60, 40);
+    const skyboxMaterial = new THREE.MeshBasicMaterial({
+      map: texture,
+      side: THREE.BackSide
+    });
+    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     scene.add(skybox);
 
     camera.position.set(5, 0, 5);
