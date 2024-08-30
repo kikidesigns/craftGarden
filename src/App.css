@@ -1,146 +1,45 @@
-.app-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
 .hot-bar {
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 10px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-}
-
-.hot-bar a, .hot-bar button {
+  background-color: #333;
+  padding: 10px;
   color: white;
-  text-decoration: none;
-  padding: 0 20px;
-  font-size: 1.2rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.hot-bar a:hover, .hot-bar button:hover {
-  color: #f0f0f0;
 }
 
 .dropdown {
   position: relative;
-  display: inline-block;
 }
 
 .dropdown-content {
   display: block;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: #f9f9f9;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
 .dropdown-content a {
-  color: white;
+  color: black;
   padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
 
 .dropdown-content a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #f1f1f1;
 }
 
 .welcome-message {
-  color: white;
-  font-size: 1.2rem;
-  margin-right: 20px;
+  font-size: 18px;
 }
 
 .jupiter-symbol {
-  color: #ffd700;
-  font-size: 1.5rem;
-  margin-right: 20px;
+  font-size: 24px;
 }
 
-.galaxy {
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-}
-
-.galaxy::before {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                    radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                    radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
-                    radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
-  background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
-  background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
-  animation: stars 240s linear infinite;
-  z-index: 0;
-}
-
-@keyframes stars {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  z-index: 2;
-  position: relative;
-}
-
-p {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
-  z-index: 2;
-  position: relative;
-}
-
-button {
-  background-color: white;
-  color: black;
-  border: none;
-  padding: 10px 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  z-index: 2;
-  position: relative;
-}
-
-button:hover {
-  background-color: #f0f0f0;
-}
-
-.galaxy-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 60px; /* Add space for the hot bar */
+.venus-symbol {
+  font-size: 24px;
+  content: '\2640'; /* Venus symbol */
 }
