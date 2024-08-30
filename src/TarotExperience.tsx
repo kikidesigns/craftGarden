@@ -17,7 +17,7 @@ const TarotExperience: React.FC = () => {
 
     // Create a simple cube as a placeholder for the tarot card
     const geometry = new THREE.BoxGeometry(1, 1.5, 0.1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Changed to yellow
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
