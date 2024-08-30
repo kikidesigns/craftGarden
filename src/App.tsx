@@ -16,7 +16,6 @@ function HotBar() {
 
   return (
     <div className="hot-bar">
-      <Link to="/">Home</Link>
       <div className="dropdown">
         <button onClick={() => setShowDropdown(!showDropdown)}>Tarot Spreads</button>
         {showDropdown && (
@@ -27,10 +26,10 @@ function HotBar() {
           </div>
         )}
       </div>
-      <Link to="/about">About</Link>
-      <Link to="/contact">Contact</Link>
       <span className="welcome-message">Welcome to Tarot Experience</span>
-      <span className="jupiter-symbol">♃</span>
+      <span className="jupiter-symbol">
+        \\u2643
+      </span>
     </div>
   )
 }
@@ -58,18 +57,6 @@ function App() {
           <>
             <HotBar />
             <TarotExperience />
-          </>
-        } />
-        <Route path="/about" element={
-          <>
-            <HotBar />
-            <div>About Page</div>
-          </>
-        } />
-        <Route path="/contact" element={
-          <>
-            <HotBar />
-            <div>Contact Page</div>
           </>
         } />
       </Routes>
