@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 const TarotExperience: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [selectedSpread, setSelectedSpread] = useState<string>('');
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -21,21 +22,52 @@ const TarotExperience: React.FC = () => {
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
-    // Create blue spheres for the three card spread positions
+    // Create blue spheres for the selected tarot spread
     const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
     const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Blue color
 
-    const positions = [
-      { x: -1.5, y: 0, z: 0 },
-      { x: 0, y: 0, z: 0 },
-      { x: 1.5, y: 0, z: 0 }
-    ];
+    const positions = {
+      "Three Card Spread": [
+        { x: -1.5, y: 0, z: 0 },
+        { x: 0, y: 0, z: 0 },
+        { x: 1.5, y: 0, z: 0 }
+      ],
+      "Celtic Cross": [
+        { x: -1, y: 0, z: 0 },
+        { x: 0, y: 0, z: 0 },
+        { x: 1, y: 0, z: 0 },
+        { x: 0, y: 1, z: 0 },
+        { x: 0, y: -1, z: 0 }
+      ],
+      "Horseshoe Spread": [
+        { x: -1.5, y: 0, z: 0 },
+        { x: 0, y: 0, z: 0 },
+        { x: 1.5, y: 0, z: 0 },
+        { x: 0, y: 1, z: 0 },
+        { x: 0, y: -1, z: 0 }
+      ],
+      "Relationship Spread": [
+        { x: -1, y: 0, z: 0 },
+        { x: 1, y: 0, z: 0 },
+        { x: 0, y: 1, z: 0 }
+      ],
+      "Career Path Spread": [
+        { x: -1.5, y: 0, z: 0 },
+        { x: 0, y: 0, z: 0 },
+        { x: 1.5, y: 0, z: 0 }
+      ]
+    };
 
-    positions.forEach(pos => {
-      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-      sphere.position.set(pos.x, pos.y, pos.z);
-      scene.add(sphere);
-    });
+    const addSpheres = (spread: string) => {
+      const spreadPositions = positions[spread];
+      if (spreadPositions) {
+        spreadPositions.forEach(pos => {
+          const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+          sphere.position.set(pos.x, pos.y, pos.z);
+          scene.add(sphere);
+        });
+      }
+    };
 
     // Add skybox
     const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
@@ -55,8 +87,6 @@ const TarotExperience: React.FC = () => {
     // Render the scene
     const animate = () => {
       requestAnimationFrame(animate);
-      // cube.rotation.x += 0.01; // Stopped rotation
-      // cube.rotation.y += 0.01; // Stopped rotation
       renderer.render(scene, camera);
     };
     animate();
@@ -79,7 +109,7 @@ const TarotExperience: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       mountRef.current?.removeChild(renderer.domElement);
     };
-  }, []);
+  }, [selectedSpread]);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
