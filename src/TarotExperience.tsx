@@ -70,20 +70,21 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
 
     addSpheres(selectedSpread);
 
-    // Add skybox
+    // Add skybox (placeholder)
     const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
     const skyboxMaterials = [
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/right.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/left.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/top.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/bottom.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/front.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/back.png'), side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
+      new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide }),
     ];
     const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
     scene.add(skybox);
 
-    camera.position.z = 5;
+    camera.position.set(5, 0, 5);
+    camera.lookAt(0, 0, 0);
 
     // Render the scene
     const animate = () => {
@@ -113,18 +114,8 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   }, [selectedSpread]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
-      <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        left: '20px',
-        color: 'white',
-        fontSize: '24px',
-        zIndex: 10
-      }}>
-        Welcome to the Tarot Experience!
-      </div>
+    <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px', display: 'flex', justifyContent: 'flex-end' }}>
+      <div ref={mountRef} style={{ width: '80%', height: '100%' }} />
     </div>
   );
 };
