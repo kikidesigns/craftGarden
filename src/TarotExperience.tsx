@@ -1,8 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [blueDots, setBlueDots] = useState<THREE.Vector3[]>([]);
+  const [isPlacingDots, setIsPlacingDots] = useState(false);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -15,79 +18,66 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     renderer.setSize(window.innerWidth, window.innerHeight);
     mountRef.current.appendChild(renderer.domElement);
 
-    // Create a simple cube as a placeholder for the tarot card
+    // Add OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.enableZoom = true;
+
+    // Create a yellow box
     const geometry = new THREE.BoxGeometry(1, 1.5, 0.1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Changed to yellow
+    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
 
-    // Create blue spheres for the selected tarot spread
-    const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-    const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Blue color
-
-    const positions = {
-      "Three Card Spread": [
-        { x: -1.5, y: 0, z: 0 },
-        { x: 0, y: 0, z: 0 },
-        { x: 1.5, y: 0, z: 0 }
-      ],
-      "Celtic Cross": [
-        { x: -1, y: 0, z: 0 },
-        { x: 0, y: 0, z: 0 },
-        { x: 1, y: 0, z: 0 },
-        { x: 0, y: 1, z: 0 },
-        { x: 0, y: -1, z: 0 }
-      ],
-      "Horseshoe Spread": [
-        { x: -1.5, y: 0, z: 0 },
-        { x: 0, y: 0, z: 0 },
-        { x: 1.5, y: 0, z: 0 },
-        { x: 0, y: 1, z: 0 },
-        { x: 0, y: -1, z: 0 }
-      ],
-      "Relationship Spread": [
-        { x: -1, y: 0, z: 0 },
-        { x: 1, y: 0, z: 0 },
-        { x: 0, y: 1, z: 0 }
-      ],
-      "Career Path Spread": [
-        { x: -1.5, y: 0, z: 0 },
-        { x: 0, y: 0, z: 0 },
-        { x: 1.5, y: 0, z: 0 }
-      ]
-    };
-
-    const addSpheres = (spread: string) => {
-      const spreadPositions = positions[spread];
-      if (spreadPositions) {
-        spreadPositions.forEach(pos => {
-          const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-          sphere.position.set(pos.x, pos.y, pos.z);
-          scene.add(sphere);
-        });
-      }
-    };
-
-    addSpheres(selectedSpread);
-
     // Add skybox
-    const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-    const skyboxMaterials = [
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/right.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/left.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/top.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/bottom.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/front.png'), side: THREE.BackSide }),
-      new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load('/skybox/back.png'), side: THREE.BackSide }),
-    ];
-    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
+    const skyboxGeometry = new THREE.SphereGeometry(500, 60, 40);
+    const skyboxMaterial = new THREE.MeshBasicMaterial({
+      map: new THREE.TextureLoader().load('/panoramic.jpg'),
+      side: THREE.BackSide
+    });
+    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     scene.add(skybox);
 
     camera.position.z = 5;
 
+    // Function to add blue dots
+    const addBlueDot = (position: THREE.Vector3) => {
+      const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+      const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      sphere.position.copy(position);
+      scene.add(sphere);
+      setBlueDots(prevDots => [...prevDots, position]);
+    };
+
+    // Raycaster for mouse interaction
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    // Event listener for mouse clicks
+    const onMouseClick = (event: MouseEvent) => {
+      if (!isPlacingDots) return;
+
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(scene.children);
+
+      if (intersects.length > 0) {
+        const intersectionPoint = intersects[0].point;
+        addBlueDot(intersectionPoint);
+      }
+    };
+
+    window.addEventListener('click', onMouseClick);
+
     // Render the scene
     const animate = () => {
       requestAnimationFrame(animate);
+      controls.update();
       renderer.render(scene, camera);
     };
     animate();
@@ -108,9 +98,19 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     // Clean up
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('click', onMouseClick);
       mountRef.current?.removeChild(renderer.domElement);
     };
-  }, [selectedSpread]);
+  }, [isPlacingDots]);
+
+  const toggleDotPlacement = () => {
+    setIsPlacingDots(!isPlacingDots);
+  };
+
+  const saveDotPositions = () => {
+    console.log('Blue dot positions:', blueDots);
+    // Here you can implement the logic to save the positions
+  };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
@@ -125,6 +125,28 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
       }}>
         Welcome to the Tarot Experience!
       </div>
+      <button
+        onClick={toggleDotPlacement}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '20px',
+          zIndex: 10
+        }}
+      >
+        {isPlacingDots ? 'Stop Placing Dots' : 'Start Placing Dots'}
+      </button>
+      <button
+        onClick={saveDotPositions}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '200px',
+          zIndex: 10
+        }}
+      >
+        Save Dot Positions
+      </button>
     </div>
   );
 };
