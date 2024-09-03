@@ -45,7 +45,16 @@ function HotBar({ setSelectedSpread }) {
           </div>
         )}
       </div>
-      <span className="astro-symbol" title="Daily Astrological Symbol">
+      <span 
+        className="astro-symbol" 
+        title="Daily Astrological Symbol"
+        style={{
+          fontSize: '24px',
+          fontWeight: 'bold',
+          marginLeft: 'auto',
+          marginRight: '20px'
+        }}
+      >
         {astroSymbol}
       </span>
     </div>
