@@ -26,28 +26,39 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     const deckGeometry = new THREE.BoxGeometry(1, 1.5, 0.5);
     const deckMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     const deck = new THREE.Mesh(deckGeometry, deckMaterial);
-    deck.position.set(3, 3, 0); // Move to upper right
+    deck.position.set(6, 4, 0); // Move to upper right
     scene.add(deck);
 
-    // Create three burgundy boxes for the three card spread
+    // Create card geometry and material
     const cardGeometry = new THREE.BoxGeometry(1, 1.5, 0.1);
     const cardMaterial = new THREE.MeshBasicMaterial({ color: 0x800020 }); // Burgundy color
 
+    // Function to create a card
+    const createCard = (x: number, y: number, z: number) => {
+      const card = new THREE.Mesh(cardGeometry, cardMaterial);
+      card.position.set(x, y, z);
+      return card;
+    };
+
+    // Create Three Card Spread
     const threeCardSpread = new THREE.Group();
-    const card1 = new THREE.Mesh(cardGeometry, cardMaterial);
-    card1.position.set(-2, 0, 0);
-    const card2 = new THREE.Mesh(cardGeometry, cardMaterial);
-    card2.position.set(0, 0, 0);
-    const card3 = new THREE.Mesh(cardGeometry, cardMaterial);
-    card3.position.set(2, 0, 0);
-    threeCardSpread.add(card1, card2, card3);
+    threeCardSpread.add(createCard(-2, 0, 0));
+    threeCardSpread.add(createCard(0, 0, 0));
+    threeCardSpread.add(createCard(2, 0, 0));
     scene.add(threeCardSpread);
 
-    // Create a forest green sphere for the Celtic cross
-    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
-    const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x228B22 }); // Forest green color
-    const celticCross = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    celticCross.position.set(0, -2, 0);
+    // Create Celtic Cross Spread
+    const celticCross = new THREE.Group();
+    celticCross.add(createCard(0, 0, 0));     // Card 1: The Present
+    celticCross.add(createCard(0, 0, 0.01));  // Card 2: The Challenge
+    celticCross.add(createCard(0, -2, 0));    // Card 3: The Past
+    celticCross.add(createCard(0, 2, 0));     // Card 4: The Future
+    celticCross.add(createCard(-2, 0, 0));    // Card 5: Above
+    celticCross.add(createCard(2, 0, 0));     // Card 6: Below
+    celticCross.add(createCard(4, -2, 0));    // Card 7: The Self
+    celticCross.add(createCard(4, 0, 0));     // Card 8: External Influences
+    celticCross.add(createCard(4, 2, 0));     // Card 9: Hopes and Fears
+    celticCross.add(createCard(4, 4, 0));     // Card 10: The Outcome
     scene.add(celticCross);
 
     // Add skybox
@@ -59,7 +70,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
     scene.add(skybox);
 
-    camera.position.z = 5;
+    camera.position.z = 10;
 
     // Function to update visibility based on selected spread
     const updateSpreadVisibility = () => {
