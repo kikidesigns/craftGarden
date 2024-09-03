@@ -24,9 +24,9 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     // Define card positions based on the selected spread
     if (selectedSpread === 'Three Card Spread') {
       setCardPositions([
-        { x: -2, y: 0, z: 0 },
+        { x: -2.5, y: 0, z: 0 },
         { x: 0, y: 0, z: 0 },
-        { x: 2, y: 0, z: 0 },
+        { x: 2.5, y: 0, z: 0 },
       ]);
     } else if (selectedSpread === 'Celtic Cross') {
       setCardPositions([
@@ -53,7 +53,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
 
   return (
     <div style={{ width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
-      <Canvas camera={{ position: [0, 0, 10] }}>
+      <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <OrbitControls />
