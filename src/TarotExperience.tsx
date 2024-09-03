@@ -1,116 +1,72 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import TarotDeck from './components/TarotDeck';
+
+interface TarotCard {
+  id: number;
+  name: string;
+  // Add more properties as needed
+}
+
+interface CardPosition {
+  x: number;
+  y: number;
+  z: number;
+}
 
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
-  const mountRef = useRef<HTMLDivElement>(null);
+  const [drawnCards, setDrawnCards] = useState<TarotCard[]>([]);
+  const [cardPositions, setCardPositions] = useState<CardPosition[]>([]);
 
   useEffect(() => {
-    if (!mountRef.current) return;
-
-    // Set up scene
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    mountRef.current.appendChild(renderer.domElement);
-
-    // Add OrbitControls
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.enableZoom = true;
-
-    // Create a yellow box (tarot deck)
-    const deckGeometry = new THREE.BoxGeometry(1, 1.5, 0.5);
-    const deckMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-    const deck = new THREE.Mesh(deckGeometry, deckMaterial);
-    deck.position.set(6, 4, 0); // Move to upper right
-    scene.add(deck);
-
-    // Create card geometry and material
-    const cardGeometry = new THREE.BoxGeometry(1, 1.5, 0.1);
-    const cardMaterial = new THREE.MeshBasicMaterial({ color: 0x800020 }); // Burgundy color
-
-    // Function to create a card
-    const createCard = (x: number, y: number, z: number) => {
-      const card = new THREE.Mesh(cardGeometry, cardMaterial);
-      card.position.set(x, y, z);
-      return card;
-    };
-
-    // Create Three Card Spread
-    const threeCardSpread = new THREE.Group();
-    threeCardSpread.add(createCard(-2, 0, 0));
-    threeCardSpread.add(createCard(0, 0, 0));
-    threeCardSpread.add(createCard(2, 0, 0));
-    scene.add(threeCardSpread);
-
-    // Create Celtic Cross Spread
-    const celticCross = new THREE.Group();
-    celticCross.add(createCard(0, 0, 0));     // Card 1: The Present
-    celticCross.add(createCard(0, 0, 0.01));  // Card 2: The Challenge
-    celticCross.add(createCard(0, -2, 0));    // Card 3: The Past
-    celticCross.add(createCard(0, 2, 0));     // Card 4: The Future
-    celticCross.add(createCard(-2, 0, 0));    // Card 5: Above
-    celticCross.add(createCard(2, 0, 0));     // Card 6: Below
-    celticCross.add(createCard(4, -2, 0));    // Card 7: The Self
-    celticCross.add(createCard(4, 0, 0));     // Card 8: External Influences
-    celticCross.add(createCard(4, 2, 0));     // Card 9: Hopes and Fears
-    celticCross.add(createCard(4, 4, 0));     // Card 10: The Outcome
-    scene.add(celticCross);
-
-    // Add skybox
-    const skyboxGeometry = new THREE.SphereGeometry(500, 60, 40);
-    const skyboxMaterial = new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load('/panoramic.jpg'),
-      side: THREE.BackSide
-    });
-    const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-    scene.add(skybox);
-
-    camera.position.z = 10;
-
-    // Function to update visibility based on selected spread
-    const updateSpreadVisibility = () => {
-      threeCardSpread.visible = selectedSpread === 'Three Card Spread';
-      celticCross.visible = selectedSpread === 'Celtic Cross';
-    };
-
-    updateSpreadVisibility();
-
-    // Render the scene
-    const animate = () => {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    // Handle window resize
-    const handleResize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-
-      renderer.setSize(width, height);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Clean up
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      mountRef.current?.removeChild(renderer.domElement);
-    };
+    // Define card positions based on the selected spread
+    if (selectedSpread === 'Three Card Spread') {
+      setCardPositions([
+        { x: -2, y: 0, z: 0 },
+        { x: 0, y: 0, z: 0 },
+        { x: 2, y: 0, z: 0 },
+      ]);
+    } else if (selectedSpread === 'Celtic Cross') {
+      setCardPositions([
+        { x: 0, y: 0, z: 0 },     // Card 1: The Present
+        { x: 0, y: 0, z: 0.01 },  // Card 2: The Challenge
+        { x: 0, y: -2, z: 0 },    // Card 3: The Past
+        { x: 0, y: 2, z: 0 },     // Card 4: The Future
+        { x: -2, y: 0, z: 0 },    // Card 5: Above
+        { x: 2, y: 0, z: 0 },     // Card 6: Below
+        { x: 4, y: -2, z: 0 },    // Card 7: The Self
+        { x: 4, y: 0, z: 0 },     // Card 8: External Influences
+        { x: 4, y: 2, z: 0 },     // Card 9: Hopes and Fears
+        { x: 4, y: 4, z: 0 },     // Card 10: The Outcome
+      ]);
+    }
+    setDrawnCards([]);
   }, [selectedSpread]);
 
+  const handleCardPicked = (card: TarotCard) => {
+    if (drawnCards.length < cardPositions.length) {
+      setDrawnCards([...drawnCards, card]);
+    }
+  };
+
   return (
-    <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
-      <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
+    <div style={{ width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
+      <Canvas camera={{ position: [0, 0, 10] }}>
+        <ambientLight intensity={0.5} />
+        <pointLight position={[10, 10, 10]} />
+        <OrbitControls />
+        <TarotDeck onCardPicked={handleCardPicked} />
+        {drawnCards.map((card, index) => (
+          <AnimatedCard
+            key={card.id}
+            card={card}
+            targetPosition={cardPositions[index]}
+          />
+        ))}
+        <Skybox />
+      </Canvas>
       <div style={{
         position: 'absolute',
         top: '20px',
@@ -133,6 +89,47 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
       </div>
     </div>
   );
+};
+
+const AnimatedCard: React.FC<{ card: TarotCard; targetPosition: CardPosition }> = ({ card, targetPosition }) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const [position, setPosition] = useState<[number, number, number]>([6, 4, 0]);
+
+  useFrame(() => {
+    if (meshRef.current) {
+      const newPosition = meshRef.current.position.lerp(
+        new THREE.Vector3(targetPosition.x, targetPosition.y, targetPosition.z),
+        0.05
+      );
+      setPosition([newPosition.x, newPosition.y, newPosition.z]);
+    }
+  });
+
+  return (
+    <mesh ref={meshRef} position={position}>
+      <boxGeometry args={[1, 1.5, 0.1]} />
+      <meshStandardMaterial color={0x800020} /> {/* Burgundy color */}
+    </mesh>
+  );
+};
+
+const Skybox: React.FC = () => {
+  const { scene } = useThree();
+  const loader = new THREE.TextureLoader();
+
+  useEffect(() => {
+    const texture = loader.load('/panoramic.jpg', () => {
+      const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+      rt.fromEquirectangularTexture(scene.renderer, texture);
+      scene.background = rt.texture;
+    });
+
+    return () => {
+      texture.dispose();
+    };
+  }, [scene, loader]);
+
+  return null;
 };
 
 export default TarotExperience;
