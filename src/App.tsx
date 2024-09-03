@@ -1,15 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
 import TarotExperience from './TarotExperience';
 
 function HotBar({ setSelectedSpread }) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [astroSymbol, setAstroSymbol] = useState('');
 
   const tarotSpreads = [
     "Three Card Spread",
     "Celtic Cross"
   ];
+
+  useEffect(() => {
+    const updateAstroSymbol = () => {
+      const day = new Date().getDay();
+      const symbols = {
+        0: '☉', // Sun (Sunday)
+        1: '☽', // Moon (Monday)
+        2: '♂', // Mars (Tuesday)
+        3: '☿', // Mercury (Wednesday)
+        4: '♃', // Jupiter (Thursday)
+        5: '♀', // Venus (Friday)
+        6: '♄', // Saturn (Saturday)
+      };
+      setAstroSymbol(symbols[day]);
+    };
+
+    updateAstroSymbol();
+    const timer = setInterval(updateAstroSymbol, 1000 * 60 * 60); // Update every hour
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="hot-bar">
@@ -23,8 +45,8 @@ function HotBar({ setSelectedSpread }) {
           </div>
         )}
       </div>
-      <span className="jupiter-symbol">
-        \\u2643
+      <span className="astro-symbol" title="Daily Astrological Symbol">
+        {astroSymbol}
       </span>
     </div>
   );
