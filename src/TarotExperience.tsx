@@ -22,11 +22,35 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
 
-    // Create a yellow box (tarot card placeholder)
-    const geometry = new THREE.BoxGeometry(1, 1.5, 0.1);
-    const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    // Create a yellow box (tarot deck)
+    const deckGeometry = new THREE.BoxGeometry(1, 1.5, 0.5);
+    const deckMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+    const deck = new THREE.Mesh(deckGeometry, deckMaterial);
+    deck.position.set(3, 3, 0); // Move to upper right
+    scene.add(deck);
+
+    // Create three burgundy boxes for the three card spread
+    const cardGeometry = new THREE.BoxGeometry(1, 1.5, 0.1);
+    const cardMaterial = new THREE.MeshBasicMaterial({ color: 0x800020 }); // Burgundy color
+
+    const card1 = new THREE.Mesh(cardGeometry, cardMaterial);
+    card1.position.set(-2, 0, 0);
+    scene.add(card1);
+
+    const card2 = new THREE.Mesh(cardGeometry, cardMaterial);
+    card2.position.set(0, 0, 0);
+    scene.add(card2);
+
+    const card3 = new THREE.Mesh(cardGeometry, cardMaterial);
+    card3.position.set(2, 0, 0);
+    scene.add(card3);
+
+    // Create a forest green sphere for the Celtic cross
+    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x228B22 }); // Forest green color
+    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    sphere.position.set(0, -2, 0);
+    scene.add(sphere);
 
     // Add skybox
     const skyboxGeometry = new THREE.SphereGeometry(500, 60, 40);
