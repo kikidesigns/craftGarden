@@ -1,11 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  const [blueDots, setBlueDots] = useState<THREE.Vector3[]>([]);
-  const [isPlacingDots, setIsPlacingDots] = useState(false);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -24,7 +22,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     controls.dampingFactor = 0.25;
     controls.enableZoom = true;
 
-    // Create a yellow box
+    // Create a yellow box (tarot card placeholder)
     const geometry = new THREE.BoxGeometry(1, 1.5, 0.1);
     const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     const cube = new THREE.Mesh(geometry, material);
@@ -40,39 +38,6 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     scene.add(skybox);
 
     camera.position.z = 5;
-
-    // Function to add blue dots
-    const addBlueDot = (position: THREE.Vector3) => {
-      const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-      const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-      sphere.position.copy(position);
-      scene.add(sphere);
-      setBlueDots(prevDots => [...prevDots, position]);
-    };
-
-    // Raycaster for mouse interaction
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    // Event listener for mouse clicks
-    const onMouseClick = (event: MouseEvent) => {
-      if (!isPlacingDots) return;
-
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-
-      const intersects = raycaster.intersectObjects(scene.children);
-
-      if (intersects.length > 0) {
-        const intersectionPoint = intersects[0].point;
-        addBlueDot(intersectionPoint);
-      }
-    };
-
-    window.addEventListener('click', onMouseClick);
 
     // Render the scene
     const animate = () => {
@@ -98,19 +63,9 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
     // Clean up
     return () => {
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('click', onMouseClick);
       mountRef.current?.removeChild(renderer.domElement);
     };
-  }, [isPlacingDots]);
-
-  const toggleDotPlacement = () => {
-    setIsPlacingDots(!isPlacingDots);
-  };
-
-  const saveDotPositions = () => {
-    console.log('Blue dot positions:', blueDots);
-    // Here you can implement the logic to save the positions
-  };
+  }, []);
 
   return (
     <div style={{ position: 'relative', width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
@@ -125,28 +80,6 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
       }}>
         Welcome to the Tarot Experience!
       </div>
-      <button
-        onClick={toggleDotPlacement}
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '20px',
-          zIndex: 10
-        }}
-      >
-        {isPlacingDots ? 'Stop Placing Dots' : 'Start Placing Dots'}
-      </button>
-      <button
-        onClick={saveDotPositions}
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '200px',
-          zIndex: 10
-        }}
-      >
-        Save Dot Positions
-      </button>
     </div>
   );
 };
