@@ -67,26 +67,6 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
         ))}
         <Skybox />
       </Canvas>
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        left: '20px',
-        color: 'white',
-        fontSize: '24px',
-        zIndex: 10
-      }}>
-        Welcome to the Tarot Experience!
-      </div>
-      <div style={{
-        position: 'absolute',
-        bottom: '20px',
-        left: '20px',
-        color: 'white',
-        fontSize: '18px',
-        zIndex: 10
-      }}>
-        Selected Spread: {selectedSpread}
-      </div>
     </div>
   );
 };
