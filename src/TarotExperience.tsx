@@ -30,16 +30,16 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
       ]);
     } else if (selectedSpread === 'Celtic Cross') {
       setCardPositions([
-        { x: 0, y: 0, z: 0 },     // Card 1: The Present
-        { x: 0, y: 0, z: 0.01 },  // Card 2: The Challenge
-        { x: 0, y: -2, z: 0 },    // Card 3: The Past
-        { x: 0, y: 2, z: 0 },     // Card 4: The Future
-        { x: -2, y: 0, z: 0 },    // Card 5: Above
-        { x: 2, y: 0, z: 0 },     // Card 6: Below
-        { x: 4, y: -2, z: 0 },    // Card 7: The Self
-        { x: 4, y: 0, z: 0 },     // Card 8: External Influences
-        { x: 4, y: 2, z: 0 },     // Card 9: Hopes and Fears
-        { x: 4, y: 4, z: 0 },     // Card 10: The Outcome
+        { x: -1, y: 0, z: 0 },     // Card 1: The Present
+        { x: -1, y: 0, z: 0.01 },  // Card 2: The Challenge
+        { x: -1, y: -2, z: 0 },    // Card 3: The Past
+        { x: -1, y: 2, z: 0 },     // Card 4: The Future
+        { x: -3, y: 0, z: 0 },     // Card 5: Above
+        { x: 1, y: 0, z: 0 },      // Card 6: Below
+        { x: 3, y: -2, z: 0 },     // Card 7: The Self
+        { x: 3, y: 0, z: 0 },      // Card 8: External Influences
+        { x: 3, y: 2, z: 0 },      // Card 9: Hopes and Fears
+        { x: 3, y: 4, z: 0 },      // Card 10: The Outcome
       ]);
     }
     setDrawnCards([]);
@@ -47,7 +47,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
 
   const handleCardPicked = (card: TarotCard) => {
     if (drawnCards.length < cardPositions.length) {
-      setDrawnCards([...drawnCards, card]);
+      setDrawnCards(prevCards => [...prevCards, card]);
     }
   };
 
@@ -73,7 +73,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
 
 const AnimatedCard: React.FC<{ card: TarotCard; targetPosition: CardPosition }> = ({ card, targetPosition }) => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const [position, setPosition] = useState<[number, number, number]>([6, 4, 0]);
+  const [position, setPosition] = useState<[number, number, number]>([0, 5, 0]);
 
   useFrame(() => {
     if (meshRef.current) {
