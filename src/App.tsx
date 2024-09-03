@@ -34,7 +34,19 @@ function HotBar({ setSelectedSpread }) {
   }, []);
 
   return (
-    <div className="hot-bar">
+    <div className="hot-bar" style={{ fontFamily: 'Garamond, serif' }}>
+      <span 
+        className="astro-symbol" 
+        title="Daily Astrological Symbol"
+        style={{
+          fontSize: '24px',
+          fontWeight: 'bold',
+          marginLeft: '20px',
+          marginRight: 'auto'
+        }}
+      >
+        {astroSymbol}
+      </span>
       <div className="dropdown">
         <button onClick={() => setShowDropdown(!showDropdown)}>Tarot Spreads</button>
         {showDropdown && (
@@ -45,25 +57,13 @@ function HotBar({ setSelectedSpread }) {
           </div>
         )}
       </div>
-      <span 
-        className="astro-symbol" 
-        title="Daily Astrological Symbol"
-        style={{
-          fontSize: '24px',
-          fontWeight: 'bold',
-          marginLeft: 'auto',
-          marginRight: '20px'
-        }}
-      >
-        {astroSymbol}
-      </span>
     </div>
   );
 }
 
 function LandingPage() {
   return (
-    <div className="galaxy">
+    <div className="galaxy" style={{ fontFamily: 'Garamond, serif' }}>
       <div className="galaxy-content">
         <h1>Welcome to My Galaxy</h1>
         <p>Explore the stars and beyond!</p>
@@ -80,15 +80,17 @@ function App() {
 
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/tarot" element={
-          <>
-            <HotBar setSelectedSpread={setSelectedSpread} />
-            <TarotExperience selectedSpread={selectedSpread} />
-          </>
-        } />
-      </Routes>
+      <div style={{ fontFamily: 'Garamond, serif' }}>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/tarot" element={
+            <>
+              <HotBar setSelectedSpread={setSelectedSpread} />
+              <TarotExperience selectedSpread={selectedSpread} />
+            </>
+          } />
+        </Routes>
+      </div>
     </Router>
   );
 }
