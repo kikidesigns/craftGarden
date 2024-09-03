@@ -8,10 +8,7 @@ function HotBar({ setSelectedSpread }) {
 
   const tarotSpreads = [
     "Three Card Spread",
-    "Celtic Cross",
-    "Horseshoe Spread",
-    "Relationship Spread",
-    "Career Path Spread"
+    "Celtic Cross"
   ];
 
   return (
