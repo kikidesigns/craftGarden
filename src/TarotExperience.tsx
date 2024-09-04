@@ -15,8 +15,8 @@ const TarotCard: React.FC<{ position: [number, number, number] }> = ({ position 
 
 const BlackCube: React.FC = () => {
   return (
-    <mesh position={[0, -2, 0]}>
-      <boxGeometry args={[10, 1, 10]} />
+    <mesh position={[0, -3.5, 0]}>
+      <boxGeometry args={[10, 3, 10]} />
       <meshStandardMaterial color={0x000000} />
     </mesh>
   );
@@ -24,8 +24,8 @@ const BlackCube: React.FC = () => {
 
 const RedPlane: React.FC = () => {
   return (
-    <mesh position={[0, -2.6, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[20, 20]} />
+    <mesh position={[0, -5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <planeGeometry args={[40, 40]} />
       <meshStandardMaterial color={0xff0000} />
     </mesh>
   );
@@ -75,22 +75,22 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   useEffect(() => {
     if (selectedSpread === 'Three Card Spread') {
       setCardPositions([
-        [-2.5, 0, 0],
-        [0, 0, 0],
-        [2.5, 0, 0],
+        [-2.5, -1.5, 0],
+        [0, -1.5, 0],
+        [2.5, -1.5, 0],
       ]);
     } else if (selectedSpread === 'Celtic Cross') {
       setCardPositions([
-        [0, 0, 0],      // Card 1: The Present
-        [0, 0, 0.01],   // Card 2: The Challenge
-        [0, -2, 0],     // Card 3: The Past
-        [0, 2, 0],      // Card 4: The Future
-        [-2, 0, 0],     // Card 5: Above
-        [2, 0, 0],      // Card 6: Below
-        [4, -2, 0],     // Card 7: The Self
-        [4, 0, 0],      // Card 8: External Influences
-        [4, 2, 0],      // Card 9: Hopes and Fears
-        [4, 4, 0],      // Card 10: The Outcome
+        [0, -1.5, 0],      // Card 1: The Present
+        [0, -1.5, 0.01],   // Card 2: The Challenge
+        [0, -3.5, 0],      // Card 3: The Past
+        [0, 0.5, 0],       // Card 4: The Future
+        [-2, -1.5, 0],     // Card 5: Above
+        [2, -1.5, 0],      // Card 6: Below
+        [4, -3.5, 0],      // Card 7: The Self
+        [4, -1.5, 0],      // Card 8: External Influences
+        [4, 0.5, 0],       // Card 9: Hopes and Fears
+        [4, 2.5, 0],       // Card 10: The Outcome
       ]);
     }
   }, [selectedSpread]);
