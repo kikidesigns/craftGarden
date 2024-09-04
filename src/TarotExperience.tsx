@@ -14,21 +14,35 @@ const DebugBox: React.FC = () => {
 };
 
 const Skybox: React.FC = () => {
-  const { scene, gl } = useThree();
-  const texture = useLoader(THREE.TextureLoader, panoramicImage);
-  
+  const { scene } = useThree();
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    if (texture && gl.isContextLost() === false) {
-      console.log('Texture loaded successfully');
-      try {
-        const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
-        rt.fromEquirectangularTexture(gl, texture);
-        scene.background = rt.texture;
-      } catch (error) {
-        console.error('Error creating cube render target:', error);
+    const loader = new THREE.TextureLoader();
+    loader.load(
+      panoramicImage,
+      (texture) => {
+        console.log('Texture loaded successfully');
+        try {
+          const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+          rt.fromEquirectangularTexture(scene.renderer, texture);
+          scene.background = rt.texture;
+        } catch (err) {
+          console.error('Error creating cube render target:', err);
+          setError('Failed to create skybox');
+        }
+      },
+      undefined,
+      (err) => {
+        console.error('Error loading texture:', err);
+        setError('Failed to load skybox texture');
       }
-    }
-  }, [scene, texture, gl]);
+    );
+  }, [scene]);
+
+  if (error) {
+    return <Environment preset="sunset" background />;
+  }
 
   return null;
 };
@@ -55,7 +69,6 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
         <OrbitControls />
         <Suspense fallback={<DebugBox />}>
           <Skybox />
-          <Environment preset="sunset" background />
         </Suspense>
         <DebugBox />
       </Canvas>
