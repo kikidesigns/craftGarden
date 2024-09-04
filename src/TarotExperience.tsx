@@ -1,43 +1,43 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas, useThree, useLoader } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import panoramicImage from './assets/panoramic.jpg';
 
 const DebugBox: React.FC = () => {
   return (
-    <mesh position={[0, 0, 0]}>
-      <boxGeometry args={[1, 1, 1]} />
+    <mesh position={[0, 0, -2]}>
+      <boxGeometry args={[2, 2, 2]} />
       <meshStandardMaterial color={0xff0000} />
     </mesh>
   );
 };
 
 const Skybox: React.FC = () => {
-  const { scene } = useThree();
-  const texture = useLoader(THREE.TextureLoader, panoramicImage, 
-    undefined, 
-    (error) => {
-      console.error('An error occurred while loading the texture:', error);
-    }
-  );
+  const { scene, gl } = useThree();
+  const texture = useLoader(THREE.TextureLoader, panoramicImage);
   
   useEffect(() => {
-    if (texture) {
+    if (texture && gl.isContextLost() === false) {
       console.log('Texture loaded successfully');
-      const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
-      rt.fromEquirectangularTexture(scene.renderer, texture);
-      scene.background = rt.texture;
+      try {
+        const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+        rt.fromEquirectangularTexture(gl, texture);
+        scene.background = rt.texture;
+      } catch (error) {
+        console.error('Error creating cube render target:', error);
+      }
     }
-  }, [scene, texture]);
+  }, [scene, texture, gl]);
 
   return null;
 };
 
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   console.log('Rendering TarotExperience with spread:', selectedSpread);
+  console.log('Panoramic image path:', panoramicImage);
 
-  const hotbarHeight = 60; // Adjust this value to match your hotbar's actual height
+  const hotbarHeight = 60;
 
   return (
     <div style={{ 
@@ -46,7 +46,8 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
       left: 0, 
       right: 0, 
       bottom: 0, 
-      overflow: 'hidden'
+      overflow: 'hidden',
+      backgroundColor: 'blue'
     }}>
       <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
         <ambientLight intensity={0.5} />
@@ -54,6 +55,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
         <OrbitControls />
         <Suspense fallback={<DebugBox />}>
           <Skybox />
+          <Environment preset="sunset" background />
         </Suspense>
         <DebugBox />
       </Canvas>
