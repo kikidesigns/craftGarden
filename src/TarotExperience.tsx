@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas, useThree, useLoader } from '@react-three/fiber';
-import { OrbitControls, Sky } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface CardPosition {
@@ -20,7 +20,7 @@ const TarotCard: React.FC<{ position: CardPosition }> = ({ position }) => {
 
 const Skybox: React.FC = () => {
   const { scene } = useThree();
-  const texture = useLoader(THREE.TextureLoader, '/assets/panoramic.jpg');
+  const texture = useLoader(THREE.TextureLoader, '/panoramic.jpg');
   
   useEffect(() => {
     const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
@@ -76,12 +76,14 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   }, [selectedSpread]);
 
   return (
-    <div style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0 }}>
+    <div style={{ width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
       <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <OrbitControls />
-        <Skybox />
+        <Suspense fallback={null}>
+          <Skybox />
+        </Suspense>
         <BlackCube />
         <RedPlane />
         {cardPositions.map((position, index) => (
