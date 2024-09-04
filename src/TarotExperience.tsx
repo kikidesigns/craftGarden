@@ -45,7 +45,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   }, [selectedSpread]);
 
   return (
-    <div style={{ width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
+    <div style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0 }}>
       <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
