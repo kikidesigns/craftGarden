@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
+import panoramicImage from './assets/panoramic.jpg';
 
 const DebugBox: React.FC = () => {
   return (
@@ -14,7 +15,7 @@ const DebugBox: React.FC = () => {
 
 const Skybox: React.FC = () => {
   const { scene } = useThree();
-  const texture = useLoader(THREE.TextureLoader, '/panoramic.jpg', 
+  const texture = useLoader(THREE.TextureLoader, panoramicImage, 
     undefined, 
     (error) => {
       console.error('An error occurred while loading the texture:', error);
