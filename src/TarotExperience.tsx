@@ -37,8 +37,17 @@ const Skybox: React.FC = () => {
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   console.log('Rendering TarotExperience with spread:', selectedSpread);
 
+  const hotbarHeight = 60; // Adjust this value to match your hotbar's actual height
+
   return (
-    <div style={{ width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
+    <div style={{ 
+      position: 'absolute', 
+      top: `${hotbarHeight}px`, 
+      left: 0, 
+      right: 0, 
+      bottom: 0, 
+      overflow: 'hidden'
+    }}>
       <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
