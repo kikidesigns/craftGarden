@@ -3,92 +3,49 @@ import { Canvas, useThree, useLoader } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 
-interface CardPosition {
-  x: number;
-  y: number;
-  z: number;
-}
-
-const TarotCard: React.FC<{ position: CardPosition }> = ({ position }) => {
+const DebugBox: React.FC = () => {
   return (
-    <mesh position={[position.x, position.y, position.z]}>
-      <boxGeometry args={[1, 1.5, 0.1]} />
-      <meshStandardMaterial color={0x800020} /> {/* Burgundy color */}
+    <mesh position={[0, 0, 0]}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={0xff0000} />
     </mesh>
   );
 };
 
 const Skybox: React.FC = () => {
   const { scene } = useThree();
-  const texture = useLoader(THREE.TextureLoader, '/panoramic.jpg');
+  const texture = useLoader(THREE.TextureLoader, '/panoramic.jpg', 
+    undefined, 
+    (error) => {
+      console.error('An error occurred while loading the texture:', error);
+    }
+  );
   
   useEffect(() => {
-    const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
-    rt.fromEquirectangularTexture(scene.renderer, texture);
-    scene.background = rt.texture;
+    if (texture) {
+      console.log('Texture loaded successfully');
+      const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+      rt.fromEquirectangularTexture(scene.renderer, texture);
+      scene.background = rt.texture;
+    }
   }, [scene, texture]);
 
   return null;
 };
 
-const BlackCube: React.FC = () => {
-  return (
-    <mesh position={[0, -2, 0]}>
-      <boxGeometry args={[10, 1, 10]} />
-      <meshStandardMaterial color={0x000000} />
-    </mesh>
-  );
-};
-
-const RedPlane: React.FC = () => {
-  return (
-    <mesh position={[0, -2.6, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[20, 20]} />
-      <meshStandardMaterial color={0xff0000} />
-    </mesh>
-  );
-};
-
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
-  const [cardPositions, setCardPositions] = useState<CardPosition[]>([]);
-
-  useEffect(() => {
-    if (selectedSpread === 'Three Card Spread') {
-      setCardPositions([
-        { x: -2.5, y: 0, z: 0 },
-        { x: 0, y: 0, z: 0 },
-        { x: 2.5, y: 0, z: 0 },
-      ]);
-    } else if (selectedSpread === 'Celtic Cross') {
-      setCardPositions([
-        { x: 0, y: 0, z: 0 },      // Card 1: The Present
-        { x: 0, y: 0, z: 0.01 },   // Card 2: The Challenge
-        { x: 0, y: -2, z: 0 },     // Card 3: The Past
-        { x: 0, y: 2, z: 0 },      // Card 4: The Future
-        { x: -2, y: 0, z: 0 },     // Card 5: Above
-        { x: 2, y: 0, z: 0 },      // Card 6: Below
-        { x: 4, y: -2, z: 0 },     // Card 7: The Self
-        { x: 4, y: 0, z: 0 },      // Card 8: External Influences
-        { x: 4, y: 2, z: 0 },      // Card 9: Hopes and Fears
-        { x: 4, y: 4, z: 0 },      // Card 10: The Outcome
-      ]);
-    }
-  }, [selectedSpread]);
+  console.log('Rendering TarotExperience with spread:', selectedSpread);
 
   return (
     <div style={{ width: '100%', height: 'calc(100vh - 60px)', marginTop: '60px' }}>
-      <Canvas camera={{ position: [0, 0, 10], fov: 50 }}>
+      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <OrbitControls />
-        <Suspense fallback={null}>
+        <Suspense fallback={<DebugBox />}>
           <Skybox />
         </Suspense>
-        <BlackCube />
-        <RedPlane />
-        {cardPositions.map((position, index) => (
-          <TarotCard key={index} position={position} />
-        ))}
+        <DebugBox />
       </Canvas>
     </div>
   );
