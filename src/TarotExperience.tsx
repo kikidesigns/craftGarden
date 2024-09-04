@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { Canvas, useThree, useLoader } from '@react-three/fiber';
+import { OrbitControls, Sky } from '@react-three/drei';
 import * as THREE from 'three';
 
 interface CardPosition {
@@ -14,6 +14,37 @@ const TarotCard: React.FC<{ position: CardPosition }> = ({ position }) => {
     <mesh position={[position.x, position.y, position.z]}>
       <boxGeometry args={[1, 1.5, 0.1]} />
       <meshStandardMaterial color={0x800020} /> {/* Burgundy color */}
+    </mesh>
+  );
+};
+
+const Skybox: React.FC = () => {
+  const { scene } = useThree();
+  const texture = useLoader(THREE.TextureLoader, '/assets/panoramic.jpg');
+  
+  useEffect(() => {
+    const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+    rt.fromEquirectangularTexture(scene.renderer, texture);
+    scene.background = rt.texture;
+  }, [scene, texture]);
+
+  return null;
+};
+
+const BlackCube: React.FC = () => {
+  return (
+    <mesh position={[0, -2, 0]}>
+      <boxGeometry args={[10, 1, 10]} />
+      <meshStandardMaterial color={0x000000} />
+    </mesh>
+  );
+};
+
+const RedPlane: React.FC = () => {
+  return (
+    <mesh position={[0, -2.6, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <planeGeometry args={[20, 20]} />
+      <meshStandardMaterial color={0xff0000} />
     </mesh>
   );
 };
@@ -50,6 +81,9 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <OrbitControls />
+        <Skybox />
+        <BlackCube />
+        <RedPlane />
         {cardPositions.map((position, index) => (
           <TarotCard key={index} position={position} />
         ))}
