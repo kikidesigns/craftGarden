@@ -2,7 +2,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import * as THREE from 'three';
-import panoramicImage from './assets/panoramic.jpg';
+import panoramicImage from './assets/360_panorama.jpg';
 
 const TarotCard: React.FC<{ position: [number, number, number] }> = ({ position }) => {
   return (
@@ -74,16 +74,6 @@ const Skybox: React.FC = () => {
   return null;
 };
 
-const Fog: React.FC = () => {
-  const { scene } = useThree();
-  
-  useEffect(() => {
-    scene.fog = new THREE.FogExp2(0xDCDCDC, 0.005);
-  }, [scene]);
-
-  return null;
-};
-
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   console.log('Rendering TarotExperience with spread:', selectedSpread);
   console.log('Panoramic image path:', panoramicImage);
@@ -136,7 +126,6 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
         {cardPositions.map((position, index) => (
           <TarotCard key={index} position={position} />
         ))}
-        <Fog />
       </Canvas>
     </div>
   );
