@@ -33,7 +33,7 @@ const GroundPlane: React.FC = () => {
 
 const GrayBox: React.FC = () => {
   return (
-    <mesh position={[0, -1.9, 0]}>
+    <mesh position={[-4, -1.9, -4]}>
       <boxGeometry args={[1, 0.5, 1.5]} />
       <meshStandardMaterial color={0x808080} /> {/* Gray color */}
     </mesh>
@@ -70,6 +70,16 @@ const Skybox: React.FC = () => {
   if (error) {
     return <Environment preset="sunset" background />;
   }
+
+  return null;
+};
+
+const Fog: React.FC = () => {
+  const { scene } = useThree();
+  
+  useEffect(() => {
+    scene.fog = new THREE.FogExp2(0xDCDCDC, 0.005);
+  }, [scene]);
 
   return null;
 };
@@ -126,7 +136,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
         {cardPositions.map((position, index) => (
           <TarotCard key={index} position={position} />
         ))}
-        <fog attach="fog" args={['#f0f0f0', 10, 50]} />
+        <Fog />
       </Canvas>
     </div>
   );
