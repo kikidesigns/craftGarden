@@ -2,7 +2,6 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import * as THREE from 'three';
-import panoramicImage from './assets/360_panorama.jpg';
 
 const TarotCard: React.FC<{ position: [number, number, number] }> = ({ position }) => {
   return (
@@ -40,43 +39,8 @@ const GrayBox: React.FC = () => {
   );
 };
 
-const Skybox: React.FC = () => {
-  const { scene } = useThree();
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const loader = new THREE.TextureLoader();
-    loader.load(
-      panoramicImage,
-      (texture) => {
-        console.log('Texture loaded successfully');
-        try {
-          const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
-          rt.fromEquirectangularTexture(scene.renderer, texture);
-          scene.background = rt.texture;
-        } catch (err) {
-          console.error('Error creating cube render target:', err);
-          setError('Failed to create skybox');
-        }
-      },
-      undefined,
-      (err) => {
-        console.error('Error loading texture:', err);
-        setError('Failed to load skybox texture');
-      }
-    );
-  }, [scene]);
-
-  if (error) {
-    return <Environment preset="sunset" background />;
-  }
-
-  return null;
-};
-
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   console.log('Rendering TarotExperience with spread:', selectedSpread);
-  console.log('Panoramic image path:', panoramicImage);
 
   const hotbarHeight = 60;
   const [cardPositions, setCardPositions] = useState<[number, number, number][]>([]);
@@ -114,12 +78,10 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
       overflow: 'hidden',
     }}>
       <Canvas camera={{ position: [0, 5, 15], fov: 75 }}>
+        <color attach="background" args={['#87CEEB']} /> {/* Sky blue background */}
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <OrbitControls />
-        <Suspense fallback={null}>
-          <Skybox />
-        </Suspense>
         <BlackCube />
         <GroundPlane />
         <GrayBox />
