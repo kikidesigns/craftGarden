@@ -76,9 +76,7 @@ const Skybox: React.FC = () => {
 
 const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread }) => {
   console.log('Rendering TarotExperience with spread:', selectedSpread);
-  console.log('Panoramic image path:', panoramicImage);
 
-  const hotbarHeight = 60;
   const [cardPositions, setCardPositions] = useState<[number, number, number][]>([]);
 
   useEffect(() => {
@@ -107,7 +105,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   return (
     <div style={{ 
       position: 'absolute', 
-      top: `${hotbarHeight}px`, 
+      top: '60px', // Adjusted to account for the HotBar
       left: 0, 
       right: 0, 
       bottom: 0, 
