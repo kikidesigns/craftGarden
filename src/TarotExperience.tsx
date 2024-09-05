@@ -6,8 +6,8 @@ import panoramicImage from './assets/panoramic.jpg';
 
 const TarotCard: React.FC<{ position: [number, number, number] }> = ({ position }) => {
   return (
-    <mesh position={position}>
-      <boxGeometry args={[1, 1.5, 0.1]} />
+    <mesh position={position} rotation={[-Math.PI / 2, 0, 0]}>
+      <boxGeometry args={[1, 1.5, 0.02]} />
       <meshStandardMaterial color={0x800020} /> {/* Burgundy color */}
     </mesh>
   );
@@ -22,11 +22,20 @@ const BlackCube: React.FC = () => {
   );
 };
 
-const RedPlane: React.FC = () => {
+const GroundPlane: React.FC = () => {
   return (
     <mesh position={[0, -5, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <planeGeometry args={[40, 40]} />
-      <meshStandardMaterial color={0xff0000} />
+      <planeGeometry args={[100, 100]} />
+      <meshStandardMaterial color={0x8B4513} /> {/* Brown color */}
+    </mesh>
+  );
+};
+
+const GrayBox: React.FC = () => {
+  return (
+    <mesh position={[0, -1.9, 0]}>
+      <boxGeometry args={[1, 0.5, 1.5]} />
+      <meshStandardMaterial color={0x808080} /> {/* Gray color */}
     </mesh>
   );
 };
@@ -75,22 +84,22 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
   useEffect(() => {
     if (selectedSpread === 'Three Card Spread') {
       setCardPositions([
-        [-2.5, -1.5, 0],
-        [0, -1.5, 0],
-        [2.5, -1.5, 0],
+        [-2.5, -1.98, 0],
+        [0, -1.98, 0],
+        [2.5, -1.98, 0],
       ]);
     } else if (selectedSpread === 'Celtic Cross') {
       setCardPositions([
-        [0, -1.5, 0],      // Card 1: The Present
-        [0, -1.5, 0.01],   // Card 2: The Challenge
-        [0, -3.5, 0],      // Card 3: The Past
-        [0, 0.5, 0],       // Card 4: The Future
-        [-2, -1.5, 0],     // Card 5: Above
-        [2, -1.5, 0],      // Card 6: Below
-        [4, -3.5, 0],      // Card 7: The Self
-        [4, -1.5, 0],      // Card 8: External Influences
-        [4, 0.5, 0],       // Card 9: Hopes and Fears
-        [4, 2.5, 0],       // Card 10: The Outcome
+        [0, -1.98, 0],      // Card 1: The Present
+        [0, -1.97, 0],      // Card 2: The Challenge (slightly above Card 1)
+        [0, -1.98, -2],     // Card 3: The Past
+        [0, -1.98, 2],      // Card 4: The Future
+        [-2, -1.98, 0],     // Card 5: Above
+        [2, -1.98, 0],      // Card 6: Below
+        [4, -1.98, -2],     // Card 7: The Self
+        [4, -1.98, 0],      // Card 8: External Influences
+        [4, -1.98, 2],      // Card 9: Hopes and Fears
+        [4, -1.98, 4],      // Card 10: The Outcome
       ]);
     }
   }, [selectedSpread]);
@@ -104,7 +113,7 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
       bottom: 0, 
       overflow: 'hidden',
     }}>
-      <Canvas camera={{ position: [0, 0, 10], fov: 75 }}>
+      <Canvas camera={{ position: [0, 5, 15], fov: 75 }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <OrbitControls />
@@ -112,10 +121,12 @@ const TarotExperience: React.FC<{ selectedSpread: string }> = ({ selectedSpread 
           <Skybox />
         </Suspense>
         <BlackCube />
-        <RedPlane />
+        <GroundPlane />
+        <GrayBox />
         {cardPositions.map((position, index) => (
           <TarotCard key={index} position={position} />
         ))}
+        <fog attach="fog" args={['#f0f0f0', 10, 50]} />
       </Canvas>
     </div>
   );
